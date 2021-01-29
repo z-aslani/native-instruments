@@ -1,0 +1,27 @@
+---
+
+- name: kubeadm init for a master
+  shell: "kubeadm init --pod-network-cidr=10.244.0.0/16 | cat"
+  when: "'Master' in group_names"
+
+
+- name: making the .kube directory
+  file:
+    path: "/root/.kube"
+    state: directory
+    mode: '0755'
+  when: "'Master' in group_names"
+
+- name: copying /etc/kubernetes/admin.conf $HOME/.kube/config
+  copy:
+    src: /etc/kubernetes/admin.conf
+    dest: "/root/.kube/config"
+    mode: '0755'
+    owner: root
+    group: root
+    remote_src: yes
+  when: "'Master' in group_names"
+
+- name: apply network plugin 
+  shell: "kubectl apply -f {{network_plugin}} | cat"
+  when: "'Master' in group_names"

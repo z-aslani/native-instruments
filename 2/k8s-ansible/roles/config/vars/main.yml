@@ -1,0 +1,13 @@
+---
+# vars file for config
+
+# network plugin:
+network_plugin: "https://docs.projectcalico.org/manifests/calico.yaml"
+
+# zookeepr:
+dataDir: /var/lib/zookeeper
+dataLogDir: /var/log/zookeeper
+maxClientCnxns: 50
+tickTime: 2000
+initLimit: 10
+syncLimit: 5

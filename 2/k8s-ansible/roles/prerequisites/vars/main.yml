@@ -1,0 +1,24 @@
+---
+# vars file for prerequisities
+
+# prerequisites options 
+allow_disk_mount: false
+allow_firewall_config: false
+allow_proxy_config: true
+allow_clean_up: false
+allow_node_exporter_install: true
+
+# swap
+disable_swap: true
+
+# disk management
+disk: /dev/sdb
+destination: /var/lib
+filesystem: ext4
+
+# proxy setting
+# proxy format : http://ip:port
+proxy: http://x.x.x.x:x
+
+# no_proxy format: server1,server2, .... ,server N,  (needs to end with a ",")
+no_proxy: "example.com"

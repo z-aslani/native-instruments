@@ -1,0 +1,20 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+  name: application-ingress
+  namespace: native-instruments
+spec:
+  tls:
+  - hosts:
+    - [HOST]
+    secretName: nginx-cert
+  rules:
+  - host: [HOST]
+    http:
+      paths:
+      - backend:
+          serviceName: application-service
+          servicePort: 80
+

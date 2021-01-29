@@ -1,0 +1,20 @@
+---
+# tasks file for config
+
+- name: configuring the master nodes
+  import_tasks: master.yml
+  when: "'Master' in group_names and 'Joining' in group_names"
+
+- name: creating joining command 
+  shell: kubeadm token create --print-join-command
+  register: joinCommand
+  when: "'Master' in group_names"
+
+- name: debug
+  debug:
+    msg: "{{hostvars[groups['Master'][0]]['joinCommand']['stdout']}}"
+
+
+- name: joining other workers
+  shell: "{{hostvars[groups['Master'][0]]['joinCommand']['stdout']}}"
+  when: "'Worker' in group_names and 'Joining' in group_names"

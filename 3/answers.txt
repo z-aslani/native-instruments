@@ -1,0 +1,47 @@
+● How would an automated deployment of this setup look like?
+
+We can define these steps for shipping code from a development environment to staging/production environment:
+
+These are the steps we can consider in Gitlab ci as an example:
+
+stages:
+  - build-image
+  - test-image
+  - publish-image  ---> to a private registry
+  - deploy
+  - post-deploy
+
+I've defined the Gitlab ci of the nginx as an example.
+
+----------------------------
+
+● How would you backup the single components of this infrastructure?
+
+Using Cron as a scheduling daemon that executes tasks at specified intervals ( For example backup DB or K8s manifest files or etcd and store in the backup storage node.
+
+
+---------------------------
+
+● What would a rollback of a previous state of the setup look like?
+
+There are various actions we can consider.
+
+For example in K8s env, we could go back to the previous instance of the deployment if there is some issue with the current deployment.
+
+Generally for production use, the best approach is to have a testing environment where you can test any changes before applying them into production. Having this as a VM of course helps with snapshots and rollbacks.
+
+Another approach is the use of modern file systems like ZFS that also allow to do snapshots or even LVM.
+
+
+---------------------------
+
+● How would you tackle the scaling of your solution?
+
+In K8s, we can use the concept of HPA (Horizontal Pod Autoscaler) and VPA (Vertical Pod Scaler) 
+
+
+---------------------------
+
+● How would you monitor the setup?
+
+I would monitor the setup using Prometheus as a data aggregator, Grafana for Visualization and Alert manager to notify different alerts, specially the critical ones.

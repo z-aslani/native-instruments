@@ -1,0 +1,55 @@
+stages:
+  - build
+  - test
+  - publish-image
+  - deploy
+  - post-deploy
+
+
+variables:
+  IMAGE_TAG: $CI_PIPELINE_ID-$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA
+  PRIVATE_REG_IMAGE_URL: $PRIVATE_REG_URL/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME:$CI_PIPELINE_ID-$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA
+
+
+publish-image-to-private-reg:
+  stage: publish-image
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint:
+      - ''
+  rules:
+    - if: $CI_COMMIT_BRANCH == "master"
+      when: on_success
+  variables:
+    GIT_STRATEGY: fetch
+  dependencies: []
+  before_script:
+    - mkdir -p /kaniko/.docker/
+    - echo "{\"auths\":{\"$PRIVATE_REG_URL\":{\"username\":\"$PRIVATE_REG_USERNAME\",\"password\":\"$PRIVATE_REG_PASSWORD\"}}}"
+      > /kaniko/.docker/config.json
+    - echo pushing image $PRIVATE_REG_IMAGE_URL to Pegah Registry
+  script:
+    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/Dockerfile
+      --destination $PRIVATE_REG_IMAGE_URL
+
+
+deploy-production:
+  stage: deploy
+  image: kroniak/ssh-client:latest
+  rules:
+    - if: $CI_COMMIT_BRANCH == "master"
+      when: on_success
+    - when: never
+  variables:
+    GIT_STRATEGY: none
+  dependencies: []
+  before_script:
+    - chmod 700 /runner/.ssh/id_rsa
+    - eval "$(ssh-agent -s)"
+    - ssh-add /runner/.ssh/id_rsa
+  script:
+    - ssh -o "StrictHostKeyChecking=no" root@$PRODUCTION_SSH_SERVER "/home/gitlab-cicd/update-deploy.sh
+      -n $CI_PROJECT_NAMESPACE -d $CI_PROJECT_NAME -c $CI_PROJECT_NAME -i $CI_PROJECT_NAME
+      -t $IMAGE_TAG -b $CI_COMMIT_BRANCH -r $CI_PROJECT_NAMESPACE -p $CI_PROJECT_PATH
+      -m \"$CI_COMMIT_MESSAGE\" -u $GITLAB_USER_LOGIN"
+
