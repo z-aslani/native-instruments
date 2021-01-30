@@ -2,10 +2,12 @@ Setup Components
 =========
 These are the components of a highly available setup:
 
-1. HA Proxy:
-Considering two HA Proxy nodes as load balancers to get the customer requests and pass them to the K8s web servers. ( In this case, we can use nginx and also ingress nginx as web servers.)
+Using a DNS service to pass the requests to the HA proxy nodes: 
 
-2. K8s Cluster (I've prepared the ansible K8s cluster playbook for deploying a songle master K8s cluster).
+1. HA Proxy:
+Considering two HA Proxy nodes as load balancers to get end users requests and pass them to the K8s web servers. ( In this case, we can use nginx and also ingress nginx as web servers.)
+
+2. K8s Cluster (I've prepared the ansible K8s cluster playbook for deploying a single master K8s cluster).
 In K8s environement:
 
  2.1. Web server:
@@ -15,7 +17,7 @@ In K8s environement:
 
 3. Database:
 Considering our requirements we might need different kinds of DBs (SQL, noSQL)
-As an example, I've prepared the cluster of MongoDB. (Master, slave and even we can configure a arbiter node as well)
+As an example, I've prepared the cluster of MongoDB. (Master, slave and even we can configure an arbiter node as well)
 
 4. Backup storage:
 In order to save the backup of DB, K8s manifests and etcd, etc.
@@ -24,8 +26,10 @@ In order to save the backup of DB, K8s manifests and etcd, etc.
 For monitoring, I've considered prometheus, grafana and alert manager.
 
 These are the minimum tools we need to consider to setup a highly available environment.
-We can even use ELK (Elastic, Logstash, Kibana) in order to aggregate and analyze the nginx logs.
+We can even use ELK (Elastic, Logstash, Kibana) in order to aggregate and analyze the nginx and all the services logs.
 
+
+https://github.com/z-aslani/native-instruments/blob/main/The%20design%20of%20setup.png
 
 
 Author Information
