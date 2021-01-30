@@ -18,6 +18,7 @@ In K8s environement:
 3. Database:
 Considering our requirements we might need different kinds of DBs (SQL, noSQL)
 As an example, I've prepared the cluster of MongoDB. (Master, slave and even we can configure an arbiter node as well)
+For checking the MongoDB connection, we can use telnet [IP] 27017 or MongoDB client get query.
 
 4. Backup storage:
 In order to save the backup of DB, K8s manifests and etcd, etc.
