@@ -29,7 +29,7 @@ These are the minimum tools we need to consider to setup a highly available envi
 We can even use ELK (Elastic, Logstash, Kibana) in order to aggregate and analyze the nginx and all the services logs.
 
 
-https://github.com/z-aslani/native-instruments/blob/main/The%20design%20of%20setup.png
+![The design of setup](https://user-images.githubusercontent.com/31848283/106353070-2875f880-62fd-11eb-9f5a-56539dccf3ba.png)
 
 
 Author Information
