@@ -1,4 +1,4 @@
-Setup Components
+Setup Components (2021)
 =========
 These are the components of a highly available setup:
 
